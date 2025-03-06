@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">PracticaTema9</string>
+    <string name="pedidos_pendientes">PEDIDOS PENDIENTES</string>
+    <string name="btn_tiendas">Tiendas</string>
+    <string name="btn_nuevoPedido">Nuevo Pedido</string>
+    <string name="btn_nuevaTienda">Nueva Tienda</string>
+    <string name="hint_fechaEstimada">Introduzca la fecha estimada...</string>
+    <string name="hint_descripcion">Introduzca la descripción...</string>
+    <string name="hint_importe">Introduzca el importe...</string>
+    <string name="hint_nombreTienda">Introduzca el nombre de la tienda...</string>
+    <string name="brn_Aceptar">Aceptar</string>
+    <string name="btn_Cancelar">Cancelar</string>
+    <string name="btn_volver">Volver</string>
+    <string name="msgEliminarPedido">¿Estás seguro de que deseas eliminar este pedido?</string>
+    <string name="msgEliminarTienda">¿Estás seguro de que deseas eliminar esta tienda?</string>
+    <string name="checkBoxRecibido">RECIBIDO</string>
+    <string name="txtModificarTienda">Modificar Tienda</string>
+
+    <!--Para los toast... -->
+    <string name="toast_complete_all_fields">Por favor, complete todos los campos correctamente.</string>
+    <string name="toast_valid_date_format">Por favor, ingrese una fecha válida en formato YYYY-MM-DD.</string>
+    <string name="toast_valid_amount">Por favor, ingrese un importe válido.</string>
+    <string name="toast_order_registered">Pedido registrado correctamente.</string>
+    <string name="toast_error_registering_order">Error al registrar el pedido.</string>
+    <string name="toast_tiendaNuevaCorrecta">Tienda registrada correctamente.</string>
+    <string name="toast_tiendaNuevaError">Error al registrar la tienda.</string>
+    <string name="toast_borradoPedidoCorrecto">Pedido eliminado correctamente.</string>
+    <string name="toast_borradoPedidoError">Error al borrar el pedido.</string>
+    <string name="toast_borradoTiendaCorrecto">Tienda eliminada correctamente.</string>
+    <string name="toast_borradoTiendaError">Error al borrar la tienda.</string>
+    <string name="toast_ModificarPedidoCorrecto">Pedido modificado correctamente.</string>
+    <string name="toast_ModificarPedidoError">Error al modificar el pedido.</string>
+    <string name="toast_ModificarTiendaCorrecto">Tienda modificada correctamente.</string>
+    <string name="toast_ModificarTiendaError">Error al modificar la tienda.</string>
+</resources>
