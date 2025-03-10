@@ -12,6 +12,7 @@ import org.json.JSONException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import okhttp3.OkHttpClient;
@@ -53,8 +54,14 @@ public class NuevoPedidoActivity extends AppCompatActivity {
             String descripcion = editTextDescripcion.getText().toString();
             String importeTexto = editTextImporte.getText().toString();
             int idTiendaFK = obtenerIdTiendaSeleccionada();
-            if (fechaEstimada.isEmpty() || descripcion.isEmpty() || importeTexto.isEmpty() || idTiendaFK == -1) {
+            if (fechaEstimada.isEmpty() || descripcion.isEmpty() || importeTexto.isEmpty()) {
                 Toast.makeText(this, R.string.toast_complete_all_fields, Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if(idTiendaFK == -1)
+            {
+                Toast.makeText(this, R.string.toast_errorTiendaSeleccionado, Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -71,6 +78,17 @@ public class NuevoPedidoActivity extends AppCompatActivity {
                 return;
             }
 
+            // Convertir la fecha a formato americano
+            SimpleDateFormat formatoEuropeo = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            SimpleDateFormat formatoAmericano = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            try {
+                Date fechaParsed = formatoEuropeo.parse(fechaEstimada);
+                fechaEstimada = formatoAmericano.format(fechaParsed);
+            } catch (ParseException e) {
+                Toast.makeText(this, R.string.toast_valid_date_format, Toast.LENGTH_LONG).show();
+                return;
+            }
+
             boolean exito = altaRemota.darAltaPedido(fechaEstimada, descripcion, importe, idTiendaFK);
 
             if (exito) {
@@ -82,42 +100,55 @@ public class NuevoPedidoActivity extends AppCompatActivity {
         });
 
 
+
         btnCancelar.setOnClickListener(v -> {
             finish();
         });
     }
 
     private void cargarTiendasEnSpinner() {
-        String[] nombresTiendas = new String[tiendas.length()];
+        // Crear un array de nombres de tiendas con una opción predeterminada
+        String[] nombresTiendas = new String[tiendas.length() + 1];
+        nombresTiendas[0] = "Selecciona una tienda";
+
         for (int i = 0; i < tiendas.length(); i++) {
             try {
-                nombresTiendas[i] = tiendas.getJSONObject(i).getString("nombreTienda");
+                nombresTiendas[i + 1] = tiendas.getJSONObject(i).getString("nombreTienda");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+
+        // Crear adaptador para el Spinner
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, nombresTiendas);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTiendas.setAdapter(adapter);
     }
 
+
     private int obtenerIdTiendaSeleccionada() {
         int posicion = spinnerTiendas.getSelectedItemPosition();
+        if (posicion == 0) {
+            // La posición 0 es la opción predeterminada "Selecciona una tienda"
+            return -1;
+        }
         try {
-            return tiendas.getJSONObject(posicion).getInt("idTienda");
+            return tiendas.getJSONObject(posicion - 1).getInt("idTienda");
         } catch (JSONException e) {
             e.printStackTrace();
             return -1;
         }
     }
+
     private boolean esFechaValida(String fecha) {
-        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        formato.setLenient(false); // Evita que acepte fechas inválidas como "2024-02-30"
+        SimpleDateFormat formatoEuropeo = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        formatoEuropeo.setLenient(false); // Evita que acepte fechas inválidas como "30/02/2024"
         try {
-            formato.parse(fecha);
+            formatoEuropeo.parse(fecha);
             return true;
         } catch (ParseException e) {
             return false;
         }
     }
-    }
+
+}

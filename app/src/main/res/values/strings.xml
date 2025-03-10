@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PracticaTema9</string>
+    <string name="app_name">MisPedidosPendientes</string>
     <string name="pedidos_pendientes">PEDIDOS PENDIENTES</string>
     <string name="btn_tiendas">Tiendas</string>
     <string name="btn_nuevoPedido">Nuevo Pedido</string>
@@ -18,7 +18,8 @@
 
     <!--Para los toast... -->
     <string name="toast_complete_all_fields">Por favor, complete todos los campos correctamente.</string>
-    <string name="toast_valid_date_format">Por favor, ingrese una fecha válida en formato YYYY-MM-DD.</string>
+    <string name="toast_errorTiendaSeleccionado">Por favor, seleccione una tienda.</string>
+    <string name="toast_valid_date_format">Por favor, ingrese una fecha válida en formato DD-MM-YYYY.</string>
     <string name="toast_valid_amount">Por favor, ingrese un importe válido.</string>
     <string name="toast_order_registered">Pedido registrado correctamente.</string>
     <string name="toast_error_registering_order">Error al registrar el pedido.</string>

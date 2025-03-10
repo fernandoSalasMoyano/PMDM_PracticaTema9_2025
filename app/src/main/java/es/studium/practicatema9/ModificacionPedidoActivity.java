@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -132,7 +133,19 @@ public class ModificacionPedidoActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.toast_valid_amount, Toast.LENGTH_LONG).show();
             return;
         }
-        boolean exito = modificacionRemota.modificarPedido(idPedido, fechaPedido, fechaEstimada, descripcion, importe, estadoPedido ,idTiendaFK);
+
+        // Convertir la fecha a formato americano
+        SimpleDateFormat formatoEuropeo = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        SimpleDateFormat formatoAmericano = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        try {
+            Date fechaParsed = formatoEuropeo.parse(fechaEstimada);
+            fechaEstimada = formatoAmericano.format(fechaParsed);
+        } catch (ParseException e) {
+            Toast.makeText(this, R.string.toast_valid_date_format, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        boolean exito = modificacionRemota.modificarPedido(idPedido, fechaPedido, fechaEstimada, descripcion, importe, estadoPedido, idTiendaFK);
 
         if (exito) {
             Toast.makeText(this, R.string.toast_ModificarPedidoCorrecto, Toast.LENGTH_LONG).show();
@@ -140,8 +153,6 @@ public class ModificacionPedidoActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, R.string.toast_ModificarPedidoError, Toast.LENGTH_LONG).show();
         }
-
-        finish();
     }
 
     private int obtenerIdTiendaSeleccionada() {
@@ -150,13 +161,14 @@ public class ModificacionPedidoActivity extends AppCompatActivity {
     }
 
     private boolean esFechaValida(String fecha) {
-        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        formato.setLenient(false); // Evita que acepte fechas inválidas como "2024-02-30"
+        SimpleDateFormat formatoEuropeo = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        formatoEuropeo.setLenient(false); // Evita que acepte fechas inválidas como "30/02/2024"
         try {
-            formato.parse(fecha);
+            formatoEuropeo.parse(fecha);
             return true;
         } catch (ParseException e) {
             return false;
         }
     }
+
 }

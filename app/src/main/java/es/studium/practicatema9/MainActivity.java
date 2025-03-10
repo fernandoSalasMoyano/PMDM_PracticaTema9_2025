@@ -19,8 +19,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private ListView listView;
@@ -93,13 +97,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private List<Pedido> parseJsonArray(JSONArray jsonArray) {
         List<Pedido> pedidos = new ArrayList<>();
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 Pedido pedido = new Pedido();
                 pedido.setIdPedido(jsonObject.getInt("idPedido"));
                 pedido.setFechaPedido(jsonObject.getString("fechaPedido"));
-                pedido.setFechaEstimadaPedido(jsonObject.getString("fechaEstimadaPedido"));
+                Date fechaEstimadaPedido = inputFormat.parse(jsonObject.getString("fechaEstimadaPedido"));
+                pedido.setFechaEstimadaPedido(outputFormat.format(fechaEstimadaPedido));
                 pedido.setDescripcionPedido(jsonObject.getString("descripcionPedido"));
                 pedido.setImportePedido(jsonObject.getDouble("importePedido"));
                 pedido.setEstadoPedido(jsonObject.getInt("estadoPedido"));
@@ -111,6 +118,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         } catch (JSONException e) {
             e.printStackTrace();
+        } catch (ParseException e)
+        {
+            throw new RuntimeException(e);
         }
         return pedidos;
     }
